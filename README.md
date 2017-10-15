@@ -8,3 +8,6 @@
 
 ## weblogwash （web日志预处理）
 对web访问日志中的各字段识别切分，去除日志中不合法的记录，根据KPI统计需求，生成各类访问请求过滤数据
+
+## mapsidejoin （map端join算法实现、缓存文件到所有的maptask）
+通过将关联的条件作为map输出的key，将两表满足join条件的数据并携带数据所来源的文件信息，发往同一个reduce task，在reduce中进行数据的串联
