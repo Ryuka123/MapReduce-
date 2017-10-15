@@ -1,6 +1,6 @@
 # MapReduce编程与算法设计
 
-## flowsum （Mapreduce中的排序初步）
+## [flowsum](https://github.com/yangzheng0515/MapReduce/tree/master/flowsum) （Mapreduce中的排序初步）
 对日志数据中的上下行流量信息汇总，并输出按照总流量倒序排序的结果
 
 ## provinceflow （Mapreduce中的分区Partitioner）
