@@ -1,78 +1,73 @@
-package mr.sharedfriends;
+package cn.itcast.bigdata.mr.fensi;
 
 import java.io.IOException;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-
-/**
-以下是qq的好友列表数据，冒号前是一个用，冒号后是该用户的所有好友（数据中的好友关系是单向的）
-A:B,C,D,F,E,O
-B:A,C,E,K
-C:F,A,D,I
-D:A,E,F,L
-E:B,C,D,M,L
-F:A,B,C,D,E,O,M
-G:A,C,D,E,F
-H:A,C,D,E,O
-I:A,O
-J:B,O
-K:A,C,D
-L:D,E,F
-M:E,F,G
-O:A,H,I,J
-
-求出哪些人两两之间有共同好友，及他俩的共同好友都有谁？
-
- * @author: yangzheng
- */
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class SharedFriendsStepOne {
 
 	static class SharedFriendsStepOneMapper extends Mapper<LongWritable, Text, Text, Text> {
-		
-		private Text map_key = new Text();
-		private Text map_value = new Text();
-		
+
 		@Override
 		protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-			String line = value.toString();	// A:B,C,D,F,E,O
-			String[] fields = line.split(":");
-			
-			map_value.set(fields[0]);	// A
-			
-			String[] arr = fields[1].split(",");	//B,C,D,F,E,O
-			
-			for (String str : arr) {
-				map_key.set(str);
-				context.write(map_key, map_value);  // <B,A><C,A><D,A><F,A><E,A><O,A>
+			// A:B,C,D,F,E,O
+			String line = value.toString();
+			String[] person_friends = line.split(":");
+			String person = person_friends[0];
+			String friends = person_friends[1];
+
+			for (String friend : friends.split(",")) {
+
+				// 输出<好友，人>
+				context.write(new Text(friend), new Text(person));
 			}
-			
+
 		}
+
 	}
-	
+
 	static class SharedFriendsStepOneReducer extends Reducer<Text, Text, Text, Text> {
-		private Text reduce_value = new Text();
-		
+
 		@Override
-		protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-			//<C,A><C,B><C,E><C,F><C,G>......
-			StringBuilder sb = new StringBuilder();
-			
-			for (Text value : values) {
-				sb.append(value.toString()).append(",");
+		protected void reduce(Text friend, Iterable<Text> persons, Context context) throws IOException, InterruptedException {
+
+			StringBuffer sb = new StringBuffer();
+
+			for (Text person : persons) {
+				sb.append(person).append(",");
+
 			}
-			
-			reduce_value.set(sb.toString());
-			// C  A,B,E,F,G,
-			context.write(key, reduce_value);
+			context.write(friend, new Text(sb.toString()));
 		}
+
 	}
-	
-	
-	public static void main(String[] args) {
+
+	public static void main(String[] args) throws Exception {
+
+		Configuration conf = new Configuration();
+
+		Job job = Job.getInstance(conf);
+		job.setJarByClass(SharedFriendsStepOne.class);
+
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
 		
+		job.setMapperClass(SharedFriendsStepOneMapper.class);
+		job.setReducerClass(SharedFriendsStepOneReducer.class);
+
+		FileInputFormat.setInputPaths(job, new Path("D:/srcdata/friends"));
+		FileOutputFormat.setOutputPath(job, new Path("D:/temp/out"));
+
+		job.waitForCompletion(true);
+
 	}
+
 }

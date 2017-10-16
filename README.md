@@ -11,3 +11,6 @@
 
 ## [mapsidejoin](https://github.com/yangzheng0515/MapReduce/tree/master/mapsidejoin) （map端join算法实现、缓存文件到所有的maptask）
 通过将关联的条件作为map输出的key，将两表满足join条件的数据并携带数据所来源的文件信息，发往同一个reduce task，在reduce中进行数据的串联
+
+## [sharedfriends](https://github.com/yangzheng0515/MapReduce/tree/master/sharedfriends) （社交粉丝数据分析）
+求出哪些人两两之间有共同好友，及他俩的共同好友都有谁？
