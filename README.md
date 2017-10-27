@@ -14,3 +14,6 @@
 
 ## [sharedfriends](https://github.com/yangzheng0515/MapReduce/tree/master/sharedfriends) （社交粉丝数据分析）
 求出哪些人两两之间有共同好友，及他俩的共同好友都有谁？
+
+## [Ganji_JN](https://github.com/yangzheng0515/MapReduce/tree/master/Ganji_JN)（济南租房数据处理）
+爬取赶集网上济南所有租房信息，并统计结果
