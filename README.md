@@ -17,3 +17,6 @@
 
 ## [Ganji_JN](https://github.com/yangzheng0515/MapReduce/tree/master/Ganji_JN)（济南租房数据处理）
 爬取赶集网上济南所有租房信息，并统计结果
+
+## [YlitechDemo](https://github.com/yangzheng0515/MapReduce/tree/master/YlitechDemo) （以利天诚中MR所有案例）
+[MapReduce编程](http://124.232.152.147:8081/ylitech-bd/portal/coursePlay/2102078c9ad44ad39ca5b8414a93d214)
